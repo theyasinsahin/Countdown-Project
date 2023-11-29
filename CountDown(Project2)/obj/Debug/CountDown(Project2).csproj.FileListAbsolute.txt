@@ -1,0 +1,8 @@
+C:\Users\Yasin\Desktop\CodingStudies\C#\CountDown(Project2)\CountDown(Project2)\bin\Debug\CountDown(Project2).exe.config
+C:\Users\Yasin\Desktop\CodingStudies\C#\CountDown(Project2)\CountDown(Project2)\bin\Debug\CountDown(Project2).exe
+C:\Users\Yasin\Desktop\CodingStudies\C#\CountDown(Project2)\CountDown(Project2)\bin\Debug\CountDown(Project2).pdb
+C:\Users\Yasin\Desktop\CodingStudies\C#\CountDown(Project2)\CountDown(Project2)\obj\Debug\CountDown(Project2).csproj.AssemblyReference.cache
+C:\Users\Yasin\Desktop\CodingStudies\C#\CountDown(Project2)\CountDown(Project2)\obj\Debug\CountDown(Project2).csproj.SuggestedBindingRedirects.cache
+C:\Users\Yasin\Desktop\CodingStudies\C#\CountDown(Project2)\CountDown(Project2)\obj\Debug\CountDown(Project2).csproj.CoreCompileInputs.cache
+C:\Users\Yasin\Desktop\CodingStudies\C#\CountDown(Project2)\CountDown(Project2)\obj\Debug\CountDown(Project2).exe
+C:\Users\Yasin\Desktop\CodingStudies\C#\CountDown(Project2)\CountDown(Project2)\obj\Debug\CountDown(Project2).pdb
