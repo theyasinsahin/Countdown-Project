@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,6 +21,13 @@ namespace CountDown_Project2_
 
 
             string[,] theMazeElem = new string[25, 55];
+
+            // I did "-" all of the elements because default value is zero and we will use zero in our game
+            for(int i = 0; i< theMazeElem.GetLength(0); i++)
+                for(int j = 0; j< theMazeElem.GetLength(1); j++)
+                {
+                    theMazeElem[i, j] = "-";
+                }
 
             int cursorx = random.Next(3, 54), cursory = random.Next(4, 25);   // position of cursor
             ConsoleKeyInfo cki; // required for readkey
@@ -274,7 +282,6 @@ namespace CountDown_Project2_
 
 
             // --- Create the numbers
-            int[,] numCoordinates = new int[70, 2];
             flag = true; // This is for control the coordinates of numbers
             int numx = 0;
             int numy = 0;
@@ -286,12 +293,10 @@ namespace CountDown_Project2_
                     numx = random.Next(4, 55);
                     numy = random.Next(4, 25);
                     for (int j = 0; j < i; j++)
-                        if (theMazeElem[numy,numx] == "#" || theMazeElem[numy, numx] == "0" || theMazeElem[numy, numx] == "1" || theMazeElem[numy, numx] == "2" || theMazeElem[numy, numx] == "3" || theMazeElem[numy, numx] == "4" || theMazeElem[numy, numx] == "5" || theMazeElem[numy, numx] == "6" || theMazeElem[numy, numx] == "7" || theMazeElem[numy, numx] == "8" || theMazeElem[numy, numx] == "9")
+                        if (theMazeElem[numy,numx] != "-")
                             flag = true;
                 }
                 flag = true;
-                numCoordinates[i, 0] = numx;
-                numCoordinates[i, 1] = numy;
                 int randomNumber = random.Next(0, 10);
                 theMazeElem[numy, numx] = Convert.ToString(randomNumber);
 
@@ -305,7 +310,6 @@ namespace CountDown_Project2_
             Console.WriteLine("Life: 5");
             Console.SetCursorPosition(60, 8);
             Console.Write("Score: 0");
-
 
             // --- Main game loop
             while (true)
@@ -323,16 +327,16 @@ namespace CountDown_Project2_
                         {
                             Console.WriteLine(" "); // delete P (old position)
                             cursorx++;
-                            if ((theMazeElem[cursory, cursorx] == "0" || theMazeElem[cursory, cursorx] == "1" || theMazeElem[cursory, cursorx] == "2" || theMazeElem[cursory, cursorx] == "3" || theMazeElem[cursory, cursorx] == "4" || theMazeElem[cursory, cursorx] == "5" || theMazeElem[cursory, cursorx] == "6" || theMazeElem[cursory, cursorx] == "7" || theMazeElem[cursory, cursorx] == "8" || theMazeElem[cursory, cursorx] == "9") && cursorx<54 && cursorx>4 && cursory <25 && cursory>3 && theMazeElem[cursory,cursorx+1] != "#")
+                            if ((theMazeElem[cursory, cursorx] != "-") && cursorx<54 && cursorx>4 && cursory <25 && cursory>3 && theMazeElem[cursory,cursorx+1] != "#")
                             {
                                 Console.SetCursorPosition(cursorx, cursory);
-                                Console.WriteLine(" "); // delete number (old position)
+                                Console.WriteLine(" "); // delete number (old position) on the maze
                                 cursorx++;
-                                theMazeElem[cursory, cursorx] = theMazeElem[cursory, cursorx - 1];
-                                theMazeElem[cursory, cursorx - 1] = " ";
+                                theMazeElem[cursory, cursorx] = theMazeElem[cursory, cursorx - 1]; // move the number next square in the array 
+                                theMazeElem[cursory, cursorx - 1] = "-"; 
                                 Console.SetCursorPosition(cursorx, cursory);
-                                Console.WriteLine(theMazeElem[cursory, cursorx]);
-                                cursorx--;
+                                Console.WriteLine(theMazeElem[cursory, cursorx]); //Write The Number
+                                cursorx--; // dicrease because after out this condition we will write P
                             }
                         }
                     }
@@ -343,16 +347,24 @@ namespace CountDown_Project2_
                         {
                             Console.WriteLine(" "); // delete P (old position)
                             cursorx--;
-                            if ((theMazeElem[cursory, cursorx] == "0" || theMazeElem[cursory, cursorx] == "1" || theMazeElem[cursory, cursorx] == "2" || theMazeElem[cursory, cursorx] == "3" || theMazeElem[cursory, cursorx] == "4" || theMazeElem[cursory, cursorx] == "5" || theMazeElem[cursory, cursorx] == "6" || theMazeElem[cursory, cursorx] == "7" || theMazeElem[cursory, cursorx] == "8" || theMazeElem[cursory, cursorx] == "9") && cursorx < 54 && cursorx > 4 && cursory < 25 && cursory > 3 && theMazeElem[cursory,cursorx - 1] != "#")
+                            if ((theMazeElem[cursory, cursorx] != "-") && cursorx < 54 && cursorx > 4 && cursory < 25 && cursory > 3 && theMazeElem[cursory,cursorx - 1] != "#")
                             {
-                                Console.SetCursorPosition(cursorx, cursory);
-                                Console.WriteLine(" "); // delete number (old position)
-                                cursorx--;
-                                theMazeElem[cursory, cursorx] = theMazeElem[cursory, cursorx + 1];
+                                int numCounter = 1;
+                                for (int i = 0; theMazeElem[cursory, cursorx - i] == "-";i++)
+                                    numCounter++;
+
+                                
+                                while(numCounter >= 1)
+                                {
+                                    Console.SetCursorPosition(cursorx - numCounter, cursory);
+                                    Console.WriteLine(" "); // delete number (old position)
+                                    theMazeElem[cursory, cursorx-numCounter] = theMazeElem[cursory, cursorx-numCounter + 1];
+                                    Console.SetCursorPosition(cursorx-numCounter, cursory);
+                                    Console.WriteLine(theMazeElem[cursory, cursorx-numCounter]);
+                                    numCounter--;
+                                }
                                 theMazeElem[cursory, cursorx + 1] = " ";
-                                Console.SetCursorPosition(cursorx, cursory);
-                                Console.WriteLine(theMazeElem[cursory, cursorx]);
-                                cursorx++;
+                                
                             }
                         }
                     }
@@ -363,7 +375,7 @@ namespace CountDown_Project2_
                         {
                             Console.WriteLine(" "); // delete P (old position)
                             cursory--;
-                            if ((theMazeElem[cursory, cursorx] == "0" || theMazeElem[cursory, cursorx] == "1" || theMazeElem[cursory, cursorx] == "2" || theMazeElem[cursory, cursorx] == "3" || theMazeElem[cursory, cursorx] == "4" || theMazeElem[cursory, cursorx] == "5" || theMazeElem[cursory, cursorx] == "6" || theMazeElem[cursory, cursorx] == "7" || theMazeElem[cursory, cursorx] == "8" || theMazeElem[cursory, cursorx] == "9") && cursorx < 55 && cursorx > 3 && cursory < 24 && cursory > 4 && theMazeElem[cursory - 1, cursorx] != "#")
+                            if ((theMazeElem[cursory, cursorx] != "-") && cursorx < 55 && cursorx > 3 && cursory < 24 && cursory > 4 && theMazeElem[cursory - 1, cursorx] != "#")
                             {
                                 Console.SetCursorPosition(cursorx, cursory);
                                 Console.WriteLine(" "); // delete number (old position)
@@ -383,7 +395,7 @@ namespace CountDown_Project2_
                         {
                             Console.WriteLine(" "); // delete P (old position)
                             cursory++;
-                            if ((theMazeElem[cursory, cursorx] == "0" || theMazeElem[cursory, cursorx] == "1" || theMazeElem[cursory, cursorx] == "2" || theMazeElem[cursory, cursorx] == "3" || theMazeElem[cursory, cursorx] == "4" || theMazeElem[cursory, cursorx] == "5" || theMazeElem[cursory, cursorx] == "6" || theMazeElem[cursory, cursorx] == "7" || theMazeElem[cursory, cursorx] == "8" || theMazeElem[cursory, cursorx] == "9") && cursorx < 55 && cursorx > 3 && cursory < 24 && cursory > 4 && theMazeElem[cursory + 1, cursorx] != "#")
+                            if ((theMazeElem[cursory, cursorx] != "-") && cursorx < 55 && cursorx > 3 && cursory < 24 && cursory > 4 && theMazeElem[cursory + 1, cursorx] != "#")
                             {
                                 Console.SetCursorPosition(cursorx, cursory);
                                 Console.WriteLine(" "); // delete number (old position)
