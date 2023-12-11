@@ -191,17 +191,18 @@ namespace CountDown_Project2_
                         if (theMazeElem[cursorY, cursorX + 1] != '#' && theMazeElem[cursorY, cursorX + 1] != '-' && theMazeElem[cursorY, cursorX + 1 + nextCounter] == '#')
                         {
                             isMovable = true;
+                            
                             if (nextCounter == 1)
                                 isMovable = false;
                             else
                             {
                                 for (int i = 0; i < nextCounter; i++)
                                 {
-                                    if (number > theMazeElem[cursorY, cursorX + nextCounter + i])
+                                    if (number > theMazeElem[cursorY, cursorX + nextCounter - i])
                                     {
                                         isMovable = false;
                                     }
-                                    number = theMazeElem[cursorY, cursorX + nextCounter + i];
+                                    number = theMazeElem[cursorY, cursorX + nextCounter - i];
                                 }
                             }
                         }
@@ -272,6 +273,8 @@ namespace CountDown_Project2_
 
                             }
                         }
+
+                        isMovable = true;
                     }
                     if (cki.Key == ConsoleKey.LeftArrow && cursorX > 4)
                     {
