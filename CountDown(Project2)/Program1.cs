@@ -256,9 +256,21 @@ namespace ConsoleApp18
                             switch (yon)
                             {
                                 case 0:
-                                    if (y1 > 1 && IsLocationValid(x1, y1 - 1, 1, 1, 0, screen))
+                                    if ((y1 > 1 && IsLocationValid(x1, y1 - 1, 1, 1, 0, screen)))
                                     {
                                         y1--;
+                                    }
+
+                                    
+                                    else
+                                    {
+                                        int temp = yon;
+                                        
+                                        do
+                                        {
+                                            yon = random.Next(4);
+                                            
+                                        } while (yon == temp);
                                     }
                                     break;
                                 case 1:
@@ -266,17 +278,47 @@ namespace ConsoleApp18
                                     {
                                         y1++;
                                     }
+                                    else
+                                    {
+                                        int temp = yon;
+                                        
+                                        do
+                                        {
+                                            yon = random.Next(4);
+                                            
+                                        } while (yon == temp);
+                                    }
                                     break;
                                 case 2:
                                     if (x1 > 1 && IsLocationValid(x1 - 1, y1, 1, 1, 0, screen))
                                     {
                                         x1--;
                                     }
+                                    else
+                                    {
+                                        int temp = yon;
+                                        
+                                        do
+                                        {
+                                            yon = random.Next(4);
+                                            
+                                        } while (yon == temp);
+                                    }
                                     break;
                                 case 3:
                                     if (x1 < 49 && IsLocationValid(x1 + 1, y1, 1, 1, 0, screen))
                                     {
                                         x1++;
+                                    }
+                                    else
+                                    {
+                                        int temp = yon;
+                                        
+                                        do
+                                        {
+                                            yon = random.Next(4);
+                                            
+                                        } while (yon == temp);
                                     }
                                     break;
                             }
