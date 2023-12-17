@@ -12,8 +12,131 @@ namespace CountDown_Project2_
         static int cursorX = random.Next(4, 54), cursorY = random.Next(4, 25);   // first position of cursor
         static char[,] theMazeElem = new char[30, 60];
         static bool flag = true; // This is for control of everything
+        static int zeroXcounter = 0;
+        static int score = 0;
 
 
+        // --- Create the walls
+        static void CreateInnerWall(int innerWallLenght, int innerWallPiece)
+        {
+            for (int j = 0; j < innerWallPiece; j++)
+            {
+                int row = 0; // Those are for set the #'s places
+                int column = 0;
+                flag = true; // This is for control the empty spaces
+                int direction = random.Next(1, 3);
+                if (direction == 1) //Horizontal
+                {
+                    do
+                    {
+                        flag = true;
+                        row = random.Next(5, 24);
+                        column = random.Next(5, 55 - innerWallLenght);
+
+                        for (int k = 0; k < theMazeElem.GetLength(0); k++)
+                            for (int l = 0; l < theMazeElem.GetLength(1); l++)
+                            {
+                                //Control The #'s up and down
+                                for (int y = -1; y < innerWallLenght + 1; y++)
+                                {
+                                    if (theMazeElem[row - 1, column + y] == '#')
+                                        flag = false;
+                                    if (theMazeElem[row + 1, column + y] == '#')
+                                        flag = false;
+                                    if (theMazeElem[row, column + y] == '#' || theMazeElem[row, column + y] == 'P')
+                                        flag = false;
+                                }
+                            }
+                    }
+                    while (flag == false);
+
+                    for (int k = 0; k < innerWallLenght; k++)
+                    {
+                        theMazeElem[row, column + k] = '#';
+                        Console.SetCursorPosition(column + k, row);
+                        Console.Write("#");
+                    }
+
+                }
+
+                else //Vertical
+                {
+                    do
+                    {
+                        flag = true;
+                        row = random.Next(5, 25 - innerWallLenght);
+                        column = random.Next(5, 54);
+                        for (int k = 0; k < theMazeElem.GetLength(0); k++)
+                            for (int l = 0; l < theMazeElem.GetLength(1); l++)
+                            {
+                                //Control The #'s up and down
+                                for (int y = -1; y < innerWallLenght + 1; y++)
+                                {
+                                    if (theMazeElem[row + y, column - 1] == '#')
+                                        flag = false;
+                                    if (theMazeElem[row + y, column + 1] == '#')
+                                        flag = false;
+                                    if (theMazeElem[row + y, column] == '#' || theMazeElem[row + y, column] == 'P')
+                                        flag = false;
+                                }
+                            }
+                    }
+                    while (flag == false);
+
+                    for (int k = 0; k < innerWallLenght; k++)
+                    {
+                        theMazeElem[row + k, column] = '#';
+                        Console.SetCursorPosition(column, row + k);
+                        Console.Write("#");
+                    }
+                }
+            }
+        }
+
+        static void DeathScreen()
+        {
+            Console.Clear(); // Delete everything that at the console
+            Console.SetCursorPosition(45, 12);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Game Over!");
+            Console.SetCursorPosition(45, 13);
+            Console.WriteLine("Your Score: " + score);
+            Console.SetCursorPosition(45, 14);
+            Console.WriteLine("Please enter for exit.");
+            Console.ReadLine(); 
+        }
+
+        static void EarnScore(int[,] zeroCoordinates)
+        {
+            switch (theMazeElem[cursorY, cursorX])
+            {
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                    score += 2;
+                    break;
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    score += 1;
+                    break;
+                case '0':
+                    score += 20;
+                    for (int i = 0; i < zeroCoordinates.GetLength(0); i++)
+                        if (zeroCoordinates[i, 0] == cursorX && zeroCoordinates[i, 1] == cursorY)
+                        {
+                            zeroXcounter--;
+                            zeroCoordinates[i, 0] = zeroCoordinates[zeroXcounter, 0];
+                            zeroCoordinates[i, 1] = zeroCoordinates[zeroXcounter, 1];
+                            zeroCoordinates[zeroXcounter, 0] = 0;
+                            zeroCoordinates[zeroXcounter, 1] = 0;
+                        }
+                    break;
+            }
+        }
 
         public static void Main(string[] args)
         {
@@ -68,7 +191,6 @@ namespace CountDown_Project2_
             int numY = 0;
 
             int[,] zeroCoordinates = new int[70, 2];
-            int zeroXcounter = 0;
 
             for (int i = 0; i < 70; i++)
             {
@@ -106,17 +228,15 @@ namespace CountDown_Project2_
             Console.Write("Score: ");
 
             DateTime timer = DateTime.Now;
-            int score = 0;
             int life = 5;
             int timerForZero = 0;
             bool isDone = true;
             // --- Main game loop --- ////////////////////////////////////////////
             while (true)
             {
-                if (life == 0)
+                if (life <= 0)
                 {
-                    Console.Clear();
-                    Console.Write("Game Over");
+                    DeathScreen();
                     break;
                 }
                 Console.SetCursorPosition(67, 8);
@@ -226,12 +346,6 @@ namespace CountDown_Project2_
 
 
                                     life--;
-                                    if (life == 0)
-                                    {
-                                        Console.Clear();
-                                        Console.Write("Game Over");
-                                        break;
-                                    }
                                 }
                                 nextCounter = 0;
                                 while (theMazeElem[cursorY, cursorX] != '-' && theMazeElem[cursorY, cursorX + 1] != '#')
@@ -244,34 +358,7 @@ namespace CountDown_Project2_
 
                                 if (theMazeElem[cursorY, cursorX + 1] == '#')
                                 {
-                                    switch (theMazeElem[cursorY, cursorX])
-                                    {
-                                        case '1':
-                                        case '2':
-                                        case '3':
-                                        case '4':
-                                            score += 2;
-                                            break;
-                                        case '5':
-                                        case '6':
-                                        case '7':
-                                        case '8':
-                                        case '9':
-                                            score += 1;
-                                            break;
-                                        case '0':
-                                            score += 20;
-                                            for (int i = 0; i < zeroCoordinates.GetLength(0); i++)
-                                                if (zeroCoordinates[i, 0] == cursorX && zeroCoordinates[i, 1] == cursorY)
-                                                {
-                                                    zeroXcounter--;
-                                                    zeroCoordinates[i, 0] = zeroCoordinates[zeroXcounter, 0];
-                                                    zeroCoordinates[i, 1] = zeroCoordinates[zeroXcounter, 1];
-                                                    zeroCoordinates[zeroXcounter, 0] = 0;
-                                                    zeroCoordinates[zeroXcounter, 1] = 0;
-                                                }
-                                            break;
-                                    }
+                                    EarnScore(zeroCoordinates);
                                 }
 
                                 for (int i = 0; i < nextCounter; i++)
@@ -338,13 +425,7 @@ namespace CountDown_Project2_
                                     for (int i = 0; i < zeroCoordinates.GetLength(0); i++)
                                         if (zeroCoordinates[i, 0] == cursorX && zeroCoordinates[i, 1] == cursorY)
                                             zeroCoordinates[i, 0] = cursorX - 1;
-                                    life--;
-                                    if (life == 0)
-                                    {
-                                        Console.Clear();
-                                        Console.Write("Game Over");
-                                        break;
-                                    }
+                                    life--;                                   
                                 }
                                 nextCounter = 0;
                                 while ((theMazeElem[cursorY, cursorX] != '-') && theMazeElem[cursorY, cursorX - 1] != '#')
@@ -356,34 +437,7 @@ namespace CountDown_Project2_
                                 Console.SetCursorPosition(cursorX + 1, cursorY);
                                 if (theMazeElem[cursorY, cursorX - 1] == '#')
                                 {
-                                    switch (theMazeElem[cursorY, cursorX])
-                                    {
-                                        case '1':
-                                        case '2':
-                                        case '3':
-                                        case '4':
-                                            score += 2;
-                                            break;
-                                        case '5':
-                                        case '6':
-                                        case '7':
-                                        case '8':
-                                        case '9':
-                                            score += 1;
-                                            break;
-                                        case '0':
-                                            score += 20;
-                                            for (int i = 0; i < zeroCoordinates.GetLength(0); i++)
-                                                if (zeroCoordinates[i, 0] == cursorX && zeroCoordinates[i, 1] == cursorY)
-                                                {
-                                                    zeroXcounter--;
-                                                    zeroCoordinates[i, 0] = zeroCoordinates[zeroXcounter, 0];
-                                                    zeroCoordinates[i, 1] = zeroCoordinates[zeroXcounter, 1];
-                                                    zeroCoordinates[zeroXcounter, 0] = 0;
-                                                    zeroCoordinates[zeroXcounter, 1] = 0;
-                                                }
-                                            break;
-                                    }
+                                    EarnScore(zeroCoordinates);
                                 }
                                 for (int i = 0; i < nextCounter; i++)
                                 {
@@ -450,12 +504,6 @@ namespace CountDown_Project2_
                                         if (zeroCoordinates[i, 0] == cursorX && zeroCoordinates[i, 1] == cursorY)
                                             zeroCoordinates[i, 1] = cursorY - 1;
                                     life--;
-                                    if (life == 0)
-                                    {
-                                        Console.Clear();
-                                        Console.Write("Game Over");
-                                        break;
-                                    }
                                 }
                                 nextCounter = 0;
                                 while ((theMazeElem[cursorY, cursorX] != '-') && theMazeElem[cursorY - 1, cursorX] != '#')
@@ -467,34 +515,7 @@ namespace CountDown_Project2_
                                 Console.SetCursorPosition(cursorX, cursorY + 1);
                                 if (theMazeElem[cursorY - 1, cursorX] == '#')
                                 {
-                                    switch (theMazeElem[cursorY, cursorX])
-                                    {
-                                        case '1':
-                                        case '2':
-                                        case '3':
-                                        case '4':
-                                            score += 2;
-                                            break;
-                                        case '5':
-                                        case '6':
-                                        case '7':
-                                        case '8':
-                                        case '9':
-                                            score += 1;
-                                            break;
-                                        case '0':
-                                            score += 20;
-                                            for (int i = 0; i < zeroCoordinates.GetLength(0); i++)
-                                                if (zeroCoordinates[i, 0] == cursorX && zeroCoordinates[i, 1] == cursorY)
-                                                {
-                                                    zeroXcounter--;
-                                                    zeroCoordinates[i, 0] = zeroCoordinates[zeroXcounter, 0];
-                                                    zeroCoordinates[i, 1] = zeroCoordinates[zeroXcounter, 1];
-                                                    zeroCoordinates[zeroXcounter, 0] = 0;
-                                                    zeroCoordinates[zeroXcounter, 1] = 0;
-                                                }
-                                            break;
-                                    }
+                                    EarnScore(zeroCoordinates);
                                 }
 
                                 for (int i = 0; i < nextCounter; i++)
@@ -561,12 +582,6 @@ namespace CountDown_Project2_
                                         if (zeroCoordinates[i, 0] == cursorX && zeroCoordinates[i, 1] == cursorY)
                                             zeroCoordinates[i, 1] = cursorY + 1;
                                     life--;
-                                    if (life == 0)
-                                    {
-                                        Console.Clear();
-                                        Console.Write("Game Over");
-                                        break;
-                                    }
                                 }
                                 nextCounter = 0;
                                 while ((theMazeElem[cursorY, cursorX] != '-') && theMazeElem[cursorY + 1, cursorX] != '#')
@@ -579,34 +594,7 @@ namespace CountDown_Project2_
                                 Console.SetCursorPosition(cursorX, cursorY - 1);
                                 if (theMazeElem[cursorY + 1, cursorX] == '#')
                                 {
-                                    switch (theMazeElem[cursorY, cursorX])
-                                    {
-                                        case '1':
-                                        case '2':
-                                        case '3':
-                                        case '4':
-                                            score += 2;
-                                            break;
-                                        case '5':
-                                        case '6':
-                                        case '7':
-                                        case '8':
-                                        case '9':
-                                            score += 1;
-                                            break;
-                                        case '0':
-                                            score += 20;
-                                            for (int i = 0; i < zeroCoordinates.GetLength(0); i++)
-                                                if (zeroCoordinates[i, 0] == cursorX && zeroCoordinates[i, 1] == cursorY)
-                                                {
-                                                    zeroXcounter--;
-                                                    zeroCoordinates[i, 0] = zeroCoordinates[zeroXcounter, 0];
-                                                    zeroCoordinates[i, 1] = zeroCoordinates[zeroXcounter, 1];
-                                                    zeroCoordinates[zeroXcounter, 0] = 0;
-                                                    zeroCoordinates[zeroXcounter, 1] = 0;
-                                                }
-                                            break;
-                                    }
+                                    EarnScore(zeroCoordinates);
                                 }
                                 for (int i = 0; i < nextCounter; i++)
                                 {
@@ -686,6 +674,11 @@ namespace CountDown_Project2_
                                     life--;
 
                             }
+                            if (theMazeElem[zeroCoordinates[i,1]+1, zeroCoordinates[i, 0]] != '-' && theMazeElem[zeroCoordinates[i, 1] - 1, zeroCoordinates[i, 0]] != '-' && theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] + 1] != '-' && theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] != '-')
+                            {
+                                flag = false;
+                                zeroDirection = 5;
+                            }    
                         }
                         while (flag);
                         Console.ForegroundColor = ConsoleColor.Red;
@@ -727,6 +720,8 @@ namespace CountDown_Project2_
                                 Console.Write("0");
                                 zeroCoordinates[i, 1] -= 1;
                                 break;
+                            default:
+                                break;
                         }
                         Console.ResetColor();
                     }
@@ -734,85 +729,6 @@ namespace CountDown_Project2_
             }
 
             Console.ReadLine();
-        }
-
-
-
-        // --- Create the walls
-        static void CreateInnerWall(int innerWallLenght, int innerWallPiece)
-        {
-            for (int j = 0; j < innerWallPiece; j++)
-            {
-                int row = 0; // Those are for set the #'s places
-                int column = 0;
-                flag = true; // This is for control the empty spaces
-                int direction = random.Next(1, 3);
-                if (direction == 1) //Horizontal
-                {
-                    do
-                    {
-                        flag = true;
-                        row = random.Next(5, 24);
-                        column = random.Next(5, 55 - innerWallLenght);
-
-                        for (int k = 0; k < theMazeElem.GetLength(0); k++)
-                            for (int l = 0; l < theMazeElem.GetLength(1); l++)
-                            {
-                                //Control The #'s up and down
-                                for (int y = -1; y < innerWallLenght + 1; y++)
-                                {
-                                    if (theMazeElem[row - 1, column + y] == '#')
-                                        flag = false;
-                                    if (theMazeElem[row + 1, column + y] == '#')
-                                        flag = false;
-                                    if (theMazeElem[row, column + y] == '#' || theMazeElem[row, column + y] == 'P')
-                                        flag = false;
-                                }
-                            }
-                    }
-                    while (flag == false);
-
-                    for (int k = 0; k < innerWallLenght; k++)
-                    {
-                        theMazeElem[row, column + k] = '#';
-                        Console.SetCursorPosition(column + k, row);
-                        Console.Write("#");
-                    }
-
-                }
-
-                else //Vertical
-                {
-                    do
-                    {
-                        flag = true;
-                        row = random.Next(5, 25 - innerWallLenght);
-                        column = random.Next(5, 54);
-                        for (int k = 0; k < theMazeElem.GetLength(0); k++)
-                            for (int l = 0; l < theMazeElem.GetLength(1); l++)
-                            {
-                                //Control The #'s up and down
-                                for (int y = -1; y < innerWallLenght + 1; y++)
-                                {
-                                    if (theMazeElem[row + y, column - 1] == '#')
-                                        flag = false;
-                                    if (theMazeElem[row + y, column + 1] == '#')
-                                        flag = false;
-                                    if (theMazeElem[row + y, column] == '#' || theMazeElem[row + y, column] == 'p')
-                                        flag = false;
-                                }
-                            }
-                    }
-                    while (flag == false);
-
-                    for (int k = 0; k < innerWallLenght; k++)
-                    {
-                        theMazeElem[row + k, column] = '#';
-                        Console.SetCursorPosition(column, row + k);
-                        Console.Write("#");
-                    }
-                }
-            }
         }
 
     }
