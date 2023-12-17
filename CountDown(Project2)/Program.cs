@@ -15,7 +15,6 @@ namespace CountDown_Project2_
         static int zeroXcounter = 0;
         static int score = 0;
 
-
         // --- Create the walls
         static void CreateInnerWall(int innerWallLenght, int innerWallPiece)
         {
@@ -56,7 +55,6 @@ namespace CountDown_Project2_
                         Console.SetCursorPosition(column + k, row);
                         Console.Write("#");
                     }
-
                 }
 
                 else //Vertical
@@ -137,12 +135,10 @@ namespace CountDown_Project2_
                     break;
             }
         }
-
         public static void Main(string[] args)
         {
             int number = '0'; // This is for the control about is the number smashable
             const int MAZE_LENGTH = 53;
-
 
             // I did "-" all of the elements because i think this is esaier way.
             for (int i = 0; i < theMazeElem.GetLength(0); i++)
@@ -217,7 +213,6 @@ namespace CountDown_Project2_
                 Console.SetCursorPosition(numX, numY);
                 Console.Write(randomNumber);
                 Console.ResetColor();
-
             }
 
             Console.SetCursorPosition(60, 4);
@@ -246,7 +241,6 @@ namespace CountDown_Project2_
                 Console.SetCursorPosition(66, 4);
                 DateTime endTime = DateTime.Now;
                 TimeSpan elapsedTime = endTime - timer;
-
 
                 // Get only the minute and second parts of the time passed.
                 string formattedElapsedTime = $"{(int)elapsedTime.TotalMinutes:00}:{elapsedTime.Seconds:00}";
@@ -296,9 +290,7 @@ namespace CountDown_Project2_
                             }
                         }
                     isDone = false;
-
                 }
-
 
                 if (Console.KeyAvailable)
                 {       // true: there is a key in keyboard buffer
@@ -357,10 +349,8 @@ namespace CountDown_Project2_
                                 Console.SetCursorPosition(cursorX - 1, cursorY);
 
                                 if (theMazeElem[cursorY, cursorX + 1] == '#')
-                                {
                                     EarnScore(zeroCoordinates);
-                                }
-
+                                
                                 for (int i = 0; i < nextCounter; i++)
                                 {
                                     Console.WriteLine(" "); // delete number (old position) on the maze
@@ -379,13 +369,10 @@ namespace CountDown_Project2_
                                     Console.ResetColor();
                                     cursorX--; // decrease because after out this condition we will write P
                                     theMazeElem[cursorY, cursorX] = '-';
-
                                 }
                                 theMazeElem[cursorY, cursorX - 1] = '-';
-
                             }
                         }
-
                         isMovable = true;
                     }
                     if (cki.Key == ConsoleKey.LeftArrow && cursorX > 4)
@@ -436,9 +423,8 @@ namespace CountDown_Project2_
 
                                 Console.SetCursorPosition(cursorX + 1, cursorY);
                                 if (theMazeElem[cursorY, cursorX - 1] == '#')
-                                {
                                     EarnScore(zeroCoordinates);
-                                }
+                                
                                 for (int i = 0; i < nextCounter; i++)
                                 {
                                     Console.WriteLine(" "); // delete number (old position) on the maze
@@ -459,12 +445,10 @@ namespace CountDown_Project2_
                                     cursorX++; // decrease because after out this condition we will write P
                                     theMazeElem[cursorY, cursorX] = '-';
                                 }
-
                                 theMazeElem[cursorY, cursorX + 1] = '-';
                             }
                         }
                         isMovable = true;
-
                     }
                     if (cki.Key == ConsoleKey.UpArrow && cursorY > 4)
                     {
@@ -536,13 +520,11 @@ namespace CountDown_Project2_
 
                                     cursorY++; // decrease because after out this condition we will write P
                                     theMazeElem[cursorY, cursorX] = '-';
-
                                 }
                                 theMazeElem[cursorY + 1, cursorX] = '-';
                             }
                         }
                         isMovable = true;
-
                     }
                     if (cki.Key == ConsoleKey.DownArrow && cursorY < 24)
                     {
@@ -590,12 +572,10 @@ namespace CountDown_Project2_
                                     cursorY++;
                                 }
 
-
                                 Console.SetCursorPosition(cursorX, cursorY - 1);
                                 if (theMazeElem[cursorY + 1, cursorX] == '#')
-                                {
                                     EarnScore(zeroCoordinates);
-                                }
+                                
                                 for (int i = 0; i < nextCounter; i++)
                                 {
                                     Console.WriteLine(" "); // delete number (old position) on the maze
@@ -614,18 +594,14 @@ namespace CountDown_Project2_
 
                                     cursorY--; // decrease because after out this condition we will write P
                                     theMazeElem[cursorY, cursorX] = '-';
-
                                 }
                                 theMazeElem[cursorY - 1, cursorX] = '-';
                             }
                         }
                         isMovable = true;
-
                     }
-
                     if (cki.Key == ConsoleKey.Escape) break;
                 }
-
 
                 Console.SetCursorPosition(cursorX, cursorY);    // refresh X (current position)
                 Console.ForegroundColor = ConsoleColor.Magenta;
@@ -650,7 +626,6 @@ namespace CountDown_Project2_
                                 flag = false;
                                 if (theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] + 1] == 'P')
                                     life--;
-
                             }
 
                             else if (zeroCoordinates[i, 0] > 4 && zeroDirection == 2 && (theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] == '-' || theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] == 'P'))
@@ -658,21 +633,18 @@ namespace CountDown_Project2_
                                 flag = false;
                                 if (theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] == 'P')
                                     life--;
-
                             }
                             else if (zeroCoordinates[i, 1] < 24 && zeroDirection == 3 && (theMazeElem[zeroCoordinates[i, 1] + 1, zeroCoordinates[i, 0]] == '-' || theMazeElem[zeroCoordinates[i, 1] + 1, zeroCoordinates[i, 0]] == 'P'))
                             {
                                 flag = false;
                                 if (theMazeElem[zeroCoordinates[i, 1] + 1, zeroCoordinates[i, 0]] == 'P')
                                     life--;
-
                             }
                             else if (zeroCoordinates[i, 1] > 4 && zeroDirection == 4 && (theMazeElem[zeroCoordinates[i, 1] - 1, zeroCoordinates[i, 0]] == '-' || theMazeElem[zeroCoordinates[i, 1] - 1, zeroCoordinates[i, 0]] == 'P'))
                             {
                                 flag = false;
                                 if (theMazeElem[zeroCoordinates[i, 1] - 1, zeroCoordinates[i, 0]] == 'P')
                                     life--;
-
                             }
                             if (theMazeElem[zeroCoordinates[i,1]+1, zeroCoordinates[i, 0]] != '-' && theMazeElem[zeroCoordinates[i, 1] - 1, zeroCoordinates[i, 0]] != '-' && theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] + 1] != '-' && theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] != '-')
                             {
@@ -727,9 +699,7 @@ namespace CountDown_Project2_
                     }
                 }
             }
-
             Console.ReadLine();
         }
-
     }
 }
