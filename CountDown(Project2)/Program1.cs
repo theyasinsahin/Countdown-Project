@@ -5,6 +5,10 @@ namespace ConsoleApp18
 {
     internal class Program
     {
+        
+        ///<summary>
+        /// Places a wall on the screen at the specified position with the given width and height.
+        ///</summary>
         private static void PlaceWall(int x, int y, int width, int height, char[,] screen)
         {
             for (int i = 0; i < height; i++)
@@ -18,6 +22,10 @@ namespace ConsoleApp18
             }
         }
 
+        
+        ///<summary>
+        /// Places a digit on the screen at the specified position with the given color.
+        ///</summary>
         private static void PlaceDigit(int x, int y, int digit, ConsoleColor color, char[,] screen)
         {
             if (IsLocationValid(x, y, 1, 1, 0, screen))
@@ -29,6 +37,9 @@ namespace ConsoleApp18
             }
         }
 
+        ///<summary>
+        /// Checks if the specified location is valid on the screen, considering the width, height, and margin.
+        ///</summary>
         private static bool IsLocationValid(int x, int y, int width, int height, int margin, char[,] screen)
         {
             for (int i = -margin; i < height + margin; i++)
@@ -37,18 +48,23 @@ namespace ConsoleApp18
                 {
                     if (x + j < 0 || x + j >= screen.GetLength(1) || y + i < 0 || y + i >= screen.GetLength(0))
                     {
-                        return false; // Geçersiz konum (ekranın dışında)
+                        return false; // invalid position (out of bounds)
                     }
 
                     if (screen[y + i, x + j] == '#' || screen[y + i, x + j] >= '0' || screen[y + i, x + j] == 'P')
                     {
-                        return false; // Geçersiz konum (duvar, rakam veya 'P' karakteri var)
+                        return false; // invalid position (collision with wall / digit / player)
                     }
                 }
             }
-            return true; // Geçerli konum
+            
+            return true;
         }
 
+        
+        ///<summary>
+        /// The main function of the program to handle user input, etc.
+        ///</summary>
         private static void Main(string[] args)
         {
             Console.CursorVisible = false;
@@ -89,7 +105,7 @@ namespace ConsoleApp18
                 int x;
                 int y;
 
-                if (wallDirection == 0) //yatay
+                if (wallDirection == 0) // horizontal
                 {
                     do
                     {
@@ -99,7 +115,7 @@ namespace ConsoleApp18
 
                     PlaceWall(x, y, 11, 1, screen);
                 }
-                else //dikey
+                else // vertical
                 {
                     do
                     {
@@ -189,7 +205,7 @@ namespace ConsoleApp18
                 py = random.Next(2, 20);
             } while (!IsLocationValid(px, py, 1, 1, 0, screen));
 
-            while (live > 0) // Oyun döngüsü
+            while (live > 0) // main game loop
             {
                 if (Console.KeyAvailable)
                 {
@@ -197,29 +213,29 @@ namespace ConsoleApp18
                     Console.SetCursorPosition(px, py);
                     Console.Write(" ");
 
-                    int yeniPx = px;
-                    int yeniPy = py;
+                    int newX = px;
+                    int newY = py;
 
                     switch (keyInfo.Key)
                     {
                         case ConsoleKey.UpArrow:
-                            yeniPy = Math.Max(1, py - 1);
+                            newY = Math.Max(1, py - 1);
                             break;
                         case ConsoleKey.DownArrow:
-                            yeniPy = Math.Min(21, py + 1);
+                            newY = Math.Min(21, py + 1);
                             break;
                         case ConsoleKey.LeftArrow:
-                            yeniPx = Math.Max(1, px - 1);
+                            newX = Math.Max(1, px - 1);
                             break;
                         case ConsoleKey.RightArrow:
-                            yeniPx = Math.Min(49, px + 1);
+                            newX = Math.Min(49, px + 1);
                             break;
                     }
 
-                    if (IsLocationValid(yeniPx, yeniPy, 1, 1, 0, screen))
+                    if (IsLocationValid(newX, newY, 1, 1, 0, screen))
                     {
-                        px = yeniPx;
-                        py = yeniPy;
+                        px = newX;
+                        py = newY;
                     }
                 }
 
@@ -249,11 +265,11 @@ namespace ConsoleApp18
                         Console.SetCursorPosition(x1, y1);
                         Console.Write(" ");
 
-                        int yon = random.Next(4);
+                        int direction = random.Next(4);
 
                         if (elapsedTime.TotalMilliseconds > moveTimers[i])
                         {
-                            switch (yon)
+                            switch (direction)
                             {
                                 case 0:
                                     if ((y1 > 1 && IsLocationValid(x1, y1 - 1, 1, 1, 0, screen)))
@@ -264,13 +280,13 @@ namespace ConsoleApp18
                                     
                                     else
                                     {
-                                        int temp = yon;
+                                        int temp = direction;
                                         
                                         do
                                         {
-                                            yon = random.Next(4);
+                                            direction = random.Next(4);
                                             
-                                        } while (yon == temp);
+                                        } while (direction == temp);
                                     }
                                     break;
                                 case 1:
@@ -280,13 +296,13 @@ namespace ConsoleApp18
                                     }
                                     else
                                     {
-                                        int temp = yon;
+                                        int temp = direction;
                                         
                                         do
                                         {
-                                            yon = random.Next(4);
+                                            direction = random.Next(4);
                                             
-                                        } while (yon == temp);
+                                        } while (direction == temp);
                                     }
                                     break;
                                 case 2:
@@ -296,13 +312,13 @@ namespace ConsoleApp18
                                     }
                                     else
                                     {
-                                        int temp = yon;
+                                        int temp = direction;
                                         
                                         do
                                         {
-                                            yon = random.Next(4);
+                                            direction = random.Next(4);
                                             
-                                        } while (yon == temp);
+                                        } while (direction == temp);
                                     }
                                     break;
                                 case 3:
@@ -312,38 +328,38 @@ namespace ConsoleApp18
                                     }
                                     else
                                     {
-                                        int temp = yon;
+                                        int temp = direction;
                                         
                                         do
                                         {
-                                            yon = random.Next(4);
+                                            direction = random.Next(4);
                                             
-                                        } while (yon == temp);
+                                        } while (direction == temp);
                                     }
                                     break;
                             }
-                            if (px == xCoordinates[i] && py == yCoordinates[i]) // P'nin olduğu yere 0 gelirse
+                            if (px == xCoordinates[i] && py == yCoordinates[i]) // P and '0' collision
                             {
-                                live--; // Canı bir azalt
+                                live--; // decrease HP by one.
                                 Console.SetCursorPosition(90, 7);
                                 Console.WriteLine("Live:" + live);
 
                                 if (live <= 0)
                                 {
-                                    Console.Clear(); // Ekranı temizle
+                                    Console.Clear(); // Clear screen
                                     Console.SetCursorPosition(45, 12);
                                     Console.ForegroundColor = ConsoleColor.Red;
-                                    Console.WriteLine("Oyun Bitti! Canınız bitti.");
+                                    Console.WriteLine("Game Over! Out of HP.");
                                     Console.SetCursorPosition(45, 13);
-                                    Console.WriteLine("Toplam Puan: " + point);
+                                    Console.WriteLine("Total Score: " + point);
                                     Console.SetCursorPosition(45, 14);
-                                    Console.WriteLine("Çıkış yapmak için Enter tuşuna basın.");
-                                    Console.ReadLine(); // Kullanıcının Enter tuşuna basmasını bekleyin ve oyunu sonlandırın
-                                    return; // Oyun döngüsünden çıkın
+                                    Console.WriteLine("Press enter to exit...");
+                                    Console.ReadLine(); // Wait for enter input to terminate the program.
+                                    return; // Break out of game loop.
                                 }
                             }
 
-                            moveTimers[i] = (int)elapsedTime.TotalMilliseconds + 1000; // Yeni bir hareket için 1 saniye ekle
+                            moveTimers[i] = (int)elapsedTime.TotalMilliseconds + 1000; // Wait 1 seconds for the next move.
                         }
                         
                         xCoordinates[i] = x1;
@@ -359,5 +375,5 @@ namespace ConsoleApp18
                 Thread.Sleep(50);
             }
         }
-    }//34,4
+    }
 }
