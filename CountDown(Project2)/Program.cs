@@ -304,11 +304,11 @@ namespace CountDown_Project2_
                         {
                             nextCounter++;
                         }
-                        if (theMazeElem[cursorY, cursorX + 1] != '#' && theMazeElem[cursorY, cursorX + 1] != '-' && theMazeElem[cursorY, cursorX + 1 + nextCounter] == '#')
+                        if (theMazeElem[cursorY, cursorX + 1] != '#' && theMazeElem[cursorY, cursorX + 1] != '-')
                         {
                             isMovable = true;
 
-                            if (nextCounter == 1)
+                            if (nextCounter == 1 && theMazeElem[cursorY, cursorX + 1 + nextCounter] == '#')
                                 isMovable = false;
                             else
                             {
@@ -382,10 +382,10 @@ namespace CountDown_Project2_
                         {
                             nextCounter++;
                         }
-                        if (theMazeElem[cursorY, cursorX - 1] != '#' && theMazeElem[cursorY, cursorX - 1] != '-' && theMazeElem[cursorY, cursorX - 1 - nextCounter] == '#')
+                        if (theMazeElem[cursorY, cursorX - 1] != '#' && theMazeElem[cursorY, cursorX - 1] != '-')
                         {
                             isMovable = true;
-                            if (nextCounter == 1)
+                            if (nextCounter == 1 && theMazeElem[cursorY, cursorX - 1 - nextCounter] == '#')
                                 isMovable = false;
                             else
                             {
@@ -457,10 +457,10 @@ namespace CountDown_Project2_
                         {
                             nextCounter++;
                         }
-                        if (theMazeElem[cursorY - 1, cursorX] != '#' && theMazeElem[cursorY - 1, cursorX] != '-' && theMazeElem[cursorY - 1 - nextCounter, cursorX] == '#')
+                        if (theMazeElem[cursorY - 1, cursorX] != '#' && theMazeElem[cursorY - 1, cursorX] != '-')
                         {
                             isMovable = true;
-                            if (nextCounter == 1)
+                            if (nextCounter == 1 && theMazeElem[cursorY - 1 - nextCounter, cursorX] == '#')
                                 isMovable = false;
                             else
                             {
@@ -533,10 +533,10 @@ namespace CountDown_Project2_
                         {
                             nextCounter++;
                         }
-                        if (theMazeElem[cursorY + 1, cursorX] != '#' && theMazeElem[cursorY + 1, cursorX] != '-' && theMazeElem[cursorY + 1 + nextCounter, cursorX] == '#')
+                        if (theMazeElem[cursorY + 1, cursorX] != '#' && theMazeElem[cursorY + 1, cursorX] != '-')
                         {
                             isMovable = true;
-                            if (nextCounter == 1)
+                            if (nextCounter == 1 && theMazeElem[cursorY + 1 + nextCounter, cursorX] == '#')
                                 isMovable = false;
                             else
                             {
