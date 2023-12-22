@@ -106,6 +106,7 @@ namespace CountDown_Project2_
 
         static void EarnScore(int[,] zeroCoordinates)
         {
+            flag = false;
             switch (theMazeElem[cursorY, cursorX])
             {
                 case '1':
@@ -113,6 +114,7 @@ namespace CountDown_Project2_
                 case '3':
                 case '4':
                     score += 2;
+                    flag = true;
                     break;
                 case '5':
                 case '6':
@@ -120,9 +122,11 @@ namespace CountDown_Project2_
                 case '8':
                 case '9':
                     score += 1;
+                    flag = true;
                     break;
                 case '0':
                     score += 20;
+                    flag = true;
                     for (int i = 0; i < zeroCoordinates.GetLength(0); i++)
                         if (zeroCoordinates[i, 0] == cursorX && zeroCoordinates[i, 1] == cursorY)
                         {
@@ -134,6 +138,30 @@ namespace CountDown_Project2_
                         }
                     break;
             }
+        }
+
+        static void CreateNumberAfterSmash()
+        {
+            int newNumX = 0;
+            int newNumY = 0;
+            flag = true;
+            while (flag)
+            {
+                flag = false;
+                newNumX = random.Next(4, 55);
+                newNumY = random.Next(4, 25);
+                if (theMazeElem[newNumY, newNumX] != '-')
+                    flag = true;
+            }
+            int randomNumber = random.Next(5, 10);
+
+            
+            theMazeElem[newNumY, newNumX] = Convert.ToChar(randomNumber + '0');
+
+            Console.SetCursorPosition(newNumX, newNumY);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(randomNumber);
+            Console.ResetColor();
         }
         public static void Main(string[] args)
         {
@@ -349,8 +377,13 @@ namespace CountDown_Project2_
                                 Console.SetCursorPosition(cursorX - 1, cursorY);
 
                                 if (theMazeElem[cursorY, cursorX + 1] == '#')
+                                {
                                     EarnScore(zeroCoordinates);
-                                
+                                    if(flag)
+                                        CreateNumberAfterSmash();
+                                    flag = true;
+                                }
+
                                 for (int i = 0; i < nextCounter; i++)
                                 {
                                     Console.WriteLine(" "); // delete number (old position) on the maze
@@ -423,8 +456,12 @@ namespace CountDown_Project2_
 
                                 Console.SetCursorPosition(cursorX + 1, cursorY);
                                 if (theMazeElem[cursorY, cursorX - 1] == '#')
+                                {
                                     EarnScore(zeroCoordinates);
-                                
+                                    if(flag)
+                                        CreateNumberAfterSmash();
+                                    flag = true;
+                                }
                                 for (int i = 0; i < nextCounter; i++)
                                 {
                                     Console.WriteLine(" "); // delete number (old position) on the maze
@@ -500,6 +537,9 @@ namespace CountDown_Project2_
                                 if (theMazeElem[cursorY - 1, cursorX] == '#')
                                 {
                                     EarnScore(zeroCoordinates);
+                                    if(flag)
+                                        CreateNumberAfterSmash();
+                                    flag = true;
                                 }
 
                                 for (int i = 0; i < nextCounter; i++)
@@ -574,8 +614,12 @@ namespace CountDown_Project2_
 
                                 Console.SetCursorPosition(cursorX, cursorY - 1);
                                 if (theMazeElem[cursorY + 1, cursorX] == '#')
+                                {
                                     EarnScore(zeroCoordinates);
-                                
+                                    if(flag)
+                                        CreateNumberAfterSmash();
+                                    flag = true;
+                                }
                                 for (int i = 0; i < nextCounter; i++)
                                 {
                                     Console.WriteLine(" "); // delete number (old position) on the maze
