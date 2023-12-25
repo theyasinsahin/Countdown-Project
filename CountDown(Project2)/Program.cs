@@ -163,7 +163,7 @@ namespace CountDown_Project2_
             Console.Write(randomNumber);
             Console.ResetColor();
         }
-        
+
         static void CreateRandomP()
         {
             theMazeElem[cursorY, cursorX] = '-';
@@ -183,7 +183,7 @@ namespace CountDown_Project2_
             theMazeElem[cursorY, cursorX] = 'P';
             flag = false;
         }
-        
+
         public static void Main(string[] args)
         {
             Console.CursorVisible = false;
@@ -683,54 +683,42 @@ namespace CountDown_Project2_
                 {
                     for (int i = 0; zeroCoordinates[i, 0] != 0; i++)
                     {
-                        flag = true;
-                        do
-                        {
-                            zeroDirection = random.Next(1, 5);
-                            if (zeroCoordinates[i, 0] < 54 && zeroDirection == 1 && (theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] + 1] == '-' || theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] + 1] == 'P'))
-                            {
-                                flag = false;
-                                if (theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] + 1] == 'P')
-                                {
-                                    life--;
-                                    CreateRandomP();
-                                }
-                            }
+                        zeroDirection = 0;
+                        // If there is P, eat it!
+                        if (theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] + 1] == 'P') { zeroDirection = 1; life--; CreateRandomP(); }
+                        if (theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] == 'P') { zeroDirection = 2; life--; CreateRandomP(); }
+                        if (theMazeElem[zeroCoordinates[i, 1] + 1, zeroCoordinates[i, 0]] == 'P') { zeroDirection = 3; life--; CreateRandomP(); }
+                        if (theMazeElem[zeroCoordinates[i, 1] - 1, zeroCoordinates[i, 0]] == 'P') { zeroDirection = 4; life--; CreateRandomP(); }
 
-                            else if (zeroCoordinates[i, 0] > 4 && zeroDirection == 2 && (theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] == '-' || theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] == 'P'))
+                        flag = true;
+                        if (zeroDirection == 0)
+                            do
                             {
-                                flag = false;
-                                if (theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] == 'P')
+                                zeroDirection = random.Next(1, 5);
+                                if (zeroCoordinates[i, 0] < 54 && zeroDirection == 1 && (theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] + 1] == '-' || theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] + 1] == 'P'))
                                 {
-                                    life--;
-                                    CreateRandomP();
+                                    flag = false;
+                                }
+
+                                else if (zeroCoordinates[i, 0] > 4 && zeroDirection == 2 && (theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] == '-' || theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] == 'P'))
+                                {
+                                    flag = false;  
+                                }
+                                else if (zeroCoordinates[i, 1] < 24 && zeroDirection == 3 && (theMazeElem[zeroCoordinates[i, 1] + 1, zeroCoordinates[i, 0]] == '-' || theMazeElem[zeroCoordinates[i, 1] + 1, zeroCoordinates[i, 0]] == 'P'))
+                                {
+                                    flag = false;    
+                                }
+                                else if (zeroCoordinates[i, 1] > 4 && zeroDirection == 4 && (theMazeElem[zeroCoordinates[i, 1] - 1, zeroCoordinates[i, 0]] == '-' || theMazeElem[zeroCoordinates[i, 1] - 1, zeroCoordinates[i, 0]] == 'P'))
+                                {
+                                    flag = false;
+                                }
+                                if (theMazeElem[zeroCoordinates[i, 1] + 1, zeroCoordinates[i, 0]] != '-' && theMazeElem[zeroCoordinates[i, 1] - 1, zeroCoordinates[i, 0]] != '-' && theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] + 1] != '-' && theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] != '-')
+                                {
+                                    flag = false;
+                                    zeroDirection = 5;
                                 }
                             }
-                            else if (zeroCoordinates[i, 1] < 24 && zeroDirection == 3 && (theMazeElem[zeroCoordinates[i, 1] + 1, zeroCoordinates[i, 0]] == '-' || theMazeElem[zeroCoordinates[i, 1] + 1, zeroCoordinates[i, 0]] == 'P'))
-                            {
-                                flag = false;
-                                if (theMazeElem[zeroCoordinates[i, 1] + 1, zeroCoordinates[i, 0]] == 'P')
-                                {
-                                    life--;
-                                    CreateRandomP();
-                                }
-                            }
-                            else if (zeroCoordinates[i, 1] > 4 && zeroDirection == 4 && (theMazeElem[zeroCoordinates[i, 1] - 1, zeroCoordinates[i, 0]] == '-' || theMazeElem[zeroCoordinates[i, 1] - 1, zeroCoordinates[i, 0]] == 'P'))
-                            {
-                                flag = false;
-                                if (theMazeElem[zeroCoordinates[i, 1] - 1, zeroCoordinates[i, 0]] == 'P')
-                                {
-                                    life--;
-                                    CreateRandomP();
-                                }
-                            }
-                            if (theMazeElem[zeroCoordinates[i, 1] + 1, zeroCoordinates[i, 0]] != '-' && theMazeElem[zeroCoordinates[i, 1] - 1, zeroCoordinates[i, 0]] != '-' && theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] + 1] != '-' && theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] != '-')
-                            {
-                                flag = false;
-                                zeroDirection = 5;
-                            }
-                        }
-                        while (flag);
+                            while (flag);
                         Console.ForegroundColor = ConsoleColor.Red;
                         switch (zeroDirection)
                         {
