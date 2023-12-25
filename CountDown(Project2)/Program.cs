@@ -345,9 +345,12 @@ namespace CountDown_Project2_
                 if (Console.KeyAvailable)
                 {
 
-                    while (Console.KeyAvailable) Console.ReadKey(false);
                     // true: there is a key in keyboard buffer
                     ConsoleKeyInfo cki = Console.ReadKey(true); // required for reading key
+                    while (Console.KeyAvailable)
+                    {
+                        Console.ReadKey(false);
+                    }
                     bool isMovable = true;
                     var nextCounter = 0; // this is for control is the P's next move to a number and after this number how many number in there.
                     if (cki.Key == ConsoleKey.RightArrow && cursorX < 54)
