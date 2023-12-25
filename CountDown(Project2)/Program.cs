@@ -646,8 +646,11 @@ namespace CountDown_Project2_
                     }
                     if (cki.Key == ConsoleKey.Escape) break;
                 }
+                
+                // clean input buffer
+                while (Console.KeyAvailable) Console.ReadKey(false);
 
-                Console.SetCursorPosition(cursorX, cursorY);    // refresh X (current position)
+                    Console.SetCursorPosition(cursorX, cursorY);    // refresh X (current position)
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine("P");
                 theMazeElem[cursorY, cursorX] = 'P';
