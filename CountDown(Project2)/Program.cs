@@ -269,7 +269,7 @@ namespace CountDown_Project2_
                 Console.SetCursorPosition(66, 4);
                 DateTime endTime = DateTime.Now;
                 TimeSpan elapsedTime = endTime - timer;
-
+                
                 // Get only the minute and second parts of the time passed.
                 string formattedElapsedTime = $"{(int)elapsedTime.TotalMinutes:00}:{elapsedTime.Seconds:00}";
 
@@ -322,6 +322,9 @@ namespace CountDown_Project2_
 
                 if (Console.KeyAvailable)
                 {       // true: there is a key in keyboard buffer
+                    
+                    while (Console.KeyAvailable) Console.ReadKey(false);
+                    
                     ConsoleKeyInfo cki = Console.ReadKey(true); // required for reading key
                     bool isMovable = true;
                     var nextCounter = 0; // this is for control is the P's next move to a number and after this number how many number in there.
@@ -646,11 +649,8 @@ namespace CountDown_Project2_
                     }
                     if (cki.Key == ConsoleKey.Escape) break;
                 }
-                
-                // clean input buffer
-                while (Console.KeyAvailable) Console.ReadKey(false);
 
-                    Console.SetCursorPosition(cursorX, cursorY);    // refresh X (current position)
+                Console.SetCursorPosition(cursorX, cursorY);    // refresh X (current position)
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine("P");
                 theMazeElem[cursorY, cursorX] = 'P';
