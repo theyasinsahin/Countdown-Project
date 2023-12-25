@@ -101,7 +101,7 @@ namespace CountDown_Project2_
             Console.WriteLine("Your Score: " + score);
             Console.SetCursorPosition(45, 14);
             Console.WriteLine("Please enter for exit.");
-            Console.ReadLine(); 
+            Console.ReadLine();
         }
 
         static void EarnScore(int[,] zeroCoordinates)
@@ -155,7 +155,7 @@ namespace CountDown_Project2_
             }
             int randomNumber = random.Next(5, 10);
 
-            
+
             theMazeElem[newNumY, newNumX] = Convert.ToChar(randomNumber + '0');
 
             Console.SetCursorPosition(newNumX, newNumY);
@@ -163,8 +163,30 @@ namespace CountDown_Project2_
             Console.Write(randomNumber);
             Console.ResetColor();
         }
+        
+        static void CreateRandomP()
+        {
+            theMazeElem[cursorY, cursorX] = '-';
+            Console.SetCursorPosition(cursorX, cursorY);
+            Console.Write(" ");
+            flag = true;
+            do
+            {
+                cursorY = random.Next(5, 25);
+                cursorX = random.Next(5, 55);
+            }
+            while (theMazeElem[cursorY, cursorX] != '-');
+            Console.SetCursorPosition(cursorX, cursorY);
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.Write("p");
+            Console.ResetColor();
+            theMazeElem[cursorY, cursorX] = 'P';
+            flag = false;
+        }
+        
         public static void Main(string[] args)
         {
+            Console.CursorVisible = false;
             int number = '0'; // This is for the control about is the number smashable
             const int MAZE_LENGTH = 53;
 
@@ -321,7 +343,10 @@ namespace CountDown_Project2_
                 }
 
                 if (Console.KeyAvailable)
-                {       // true: there is a key in keyboard buffer
+                {
+
+                    while (Console.KeyAvailable) Console.ReadKey(false);
+                    // true: there is a key in keyboard buffer
                     ConsoleKeyInfo cki = Console.ReadKey(true); // required for reading key
                     bool isMovable = true;
                     var nextCounter = 0; // this is for control is the P's next move to a number and after this number how many number in there.
@@ -363,9 +388,6 @@ namespace CountDown_Project2_
                                     for (int i = 0; i < zeroCoordinates.GetLength(0); i++)
                                         if (zeroCoordinates[i, 0] == cursorX && zeroCoordinates[i, 1] == cursorY)
                                             zeroCoordinates[i, 0] = cursorX + 1;
-
-
-                                    life--;
                                 }
                                 nextCounter = 0;
                                 while (theMazeElem[cursorY, cursorX] != '-' && theMazeElem[cursorY, cursorX + 1] != '#')
@@ -379,7 +401,7 @@ namespace CountDown_Project2_
                                 if (theMazeElem[cursorY, cursorX + 1] == '#')
                                 {
                                     EarnScore(zeroCoordinates);
-                                    if(flag)
+                                    if (flag)
                                         CreateNumberAfterSmash();
                                     flag = true;
                                 }
@@ -445,7 +467,6 @@ namespace CountDown_Project2_
                                     for (int i = 0; i < zeroCoordinates.GetLength(0); i++)
                                         if (zeroCoordinates[i, 0] == cursorX && zeroCoordinates[i, 1] == cursorY)
                                             zeroCoordinates[i, 0] = cursorX - 1;
-                                    life--;                                   
                                 }
                                 nextCounter = 0;
                                 while ((theMazeElem[cursorY, cursorX] != '-') && theMazeElem[cursorY, cursorX - 1] != '#')
@@ -458,7 +479,7 @@ namespace CountDown_Project2_
                                 if (theMazeElem[cursorY, cursorX - 1] == '#')
                                 {
                                     EarnScore(zeroCoordinates);
-                                    if(flag)
+                                    if (flag)
                                         CreateNumberAfterSmash();
                                     flag = true;
                                 }
@@ -524,7 +545,6 @@ namespace CountDown_Project2_
                                     for (int i = 0; i < zeroCoordinates.GetLength(0); i++)
                                         if (zeroCoordinates[i, 0] == cursorX && zeroCoordinates[i, 1] == cursorY)
                                             zeroCoordinates[i, 1] = cursorY - 1;
-                                    life--;
                                 }
                                 nextCounter = 0;
                                 while ((theMazeElem[cursorY, cursorX] != '-') && theMazeElem[cursorY - 1, cursorX] != '#')
@@ -537,7 +557,7 @@ namespace CountDown_Project2_
                                 if (theMazeElem[cursorY - 1, cursorX] == '#')
                                 {
                                     EarnScore(zeroCoordinates);
-                                    if(flag)
+                                    if (flag)
                                         CreateNumberAfterSmash();
                                     flag = true;
                                 }
@@ -603,7 +623,6 @@ namespace CountDown_Project2_
                                     for (int i = 0; i < zeroCoordinates.GetLength(0); i++)
                                         if (zeroCoordinates[i, 0] == cursorX && zeroCoordinates[i, 1] == cursorY)
                                             zeroCoordinates[i, 1] = cursorY + 1;
-                                    life--;
                                 }
                                 nextCounter = 0;
                                 while ((theMazeElem[cursorY, cursorX] != '-') && theMazeElem[cursorY + 1, cursorX] != '#')
@@ -616,7 +635,7 @@ namespace CountDown_Project2_
                                 if (theMazeElem[cursorY + 1, cursorX] == '#')
                                 {
                                     EarnScore(zeroCoordinates);
-                                    if(flag)
+                                    if (flag)
                                         CreateNumberAfterSmash();
                                     flag = true;
                                 }
@@ -669,32 +688,44 @@ namespace CountDown_Project2_
                             {
                                 flag = false;
                                 if (theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] + 1] == 'P')
+                                {
                                     life--;
+                                    CreateRandomP();
+                                }
                             }
 
                             else if (zeroCoordinates[i, 0] > 4 && zeroDirection == 2 && (theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] == '-' || theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] == 'P'))
                             {
                                 flag = false;
                                 if (theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] == 'P')
+                                {
                                     life--;
+                                    CreateRandomP();
+                                }
                             }
                             else if (zeroCoordinates[i, 1] < 24 && zeroDirection == 3 && (theMazeElem[zeroCoordinates[i, 1] + 1, zeroCoordinates[i, 0]] == '-' || theMazeElem[zeroCoordinates[i, 1] + 1, zeroCoordinates[i, 0]] == 'P'))
                             {
                                 flag = false;
                                 if (theMazeElem[zeroCoordinates[i, 1] + 1, zeroCoordinates[i, 0]] == 'P')
+                                {
                                     life--;
+                                    CreateRandomP();
+                                }
                             }
                             else if (zeroCoordinates[i, 1] > 4 && zeroDirection == 4 && (theMazeElem[zeroCoordinates[i, 1] - 1, zeroCoordinates[i, 0]] == '-' || theMazeElem[zeroCoordinates[i, 1] - 1, zeroCoordinates[i, 0]] == 'P'))
                             {
                                 flag = false;
                                 if (theMazeElem[zeroCoordinates[i, 1] - 1, zeroCoordinates[i, 0]] == 'P')
+                                {
                                     life--;
+                                    CreateRandomP();
+                                }
                             }
-                            if (theMazeElem[zeroCoordinates[i,1]+1, zeroCoordinates[i, 0]] != '-' && theMazeElem[zeroCoordinates[i, 1] - 1, zeroCoordinates[i, 0]] != '-' && theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] + 1] != '-' && theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] != '-')
+                            if (theMazeElem[zeroCoordinates[i, 1] + 1, zeroCoordinates[i, 0]] != '-' && theMazeElem[zeroCoordinates[i, 1] - 1, zeroCoordinates[i, 0]] != '-' && theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] + 1] != '-' && theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] != '-')
                             {
                                 flag = false;
                                 zeroDirection = 5;
-                            }    
+                            }
                         }
                         while (flag);
                         Console.ForegroundColor = ConsoleColor.Red;
