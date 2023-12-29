@@ -10,7 +10,7 @@ namespace CountDown_Project2_
         static Random random = new Random(); //It will use in every random situation
 
         static int cursorX = random.Next(4, 54), cursorY = random.Next(4, 25);   // first position of cursor
-        static char[,] theMazeElem = new char[30, 60];
+        static char[,] theMazeElem = new char[26, 56];
         static bool flag = true; // This is for control of everything
         static int zeroXcounter = 0;
         static int score = 0;
@@ -32,9 +32,7 @@ namespace CountDown_Project2_
                         row = random.Next(5, 24);
                         column = random.Next(5, 55 - innerWallLenght);
 
-                        for (int k = 0; k < theMazeElem.GetLength(0); k++)
-                            for (int l = 0; l < theMazeElem.GetLength(1); l++)
-                            {
+                        
                                 //Control The #'s up and down
                                 for (int y = -1; y < innerWallLenght + 1; y++)
                                 {
@@ -45,7 +43,7 @@ namespace CountDown_Project2_
                                     if (theMazeElem[row, column + y] == '#' || theMazeElem[row, column + y] == 'P')
                                         flag = false;
                                 }
-                            }
+                            
                     }
                     while (flag == false);
 
@@ -213,10 +211,8 @@ namespace CountDown_Project2_
                 Console.SetCursorPosition(3, 4 + i);
                 Console.Write("#");
                 theMazeElem[3 + i + 1, 3] = '#';
-                for (int j = 0; j < MAZE_LENGTH - 2; j++)
-                {
-                    Console.Write(" ");
-                }
+               
+                Console.SetCursorPosition(55, 4 + i);
                 Console.Write("#");
                 theMazeElem[4 + i, 55] = '#';
             }
@@ -227,11 +223,10 @@ namespace CountDown_Project2_
                 Console.Write("#");
                 theMazeElem[25, 3 + i] = '#';
             }
-
+            
             CreateInnerWall(3, 20);
             CreateInnerWall(7, 5);
             CreateInnerWall(11, 3);
-
             // --- Create the numbers
             int numX = 0;
             int numY = 0;
@@ -699,7 +694,6 @@ namespace CountDown_Project2_
                                 {
                                     flag = false;
                                 }
-
                                 else if (zeroCoordinates[i, 0] > 4 && zeroDirection == 2 && (theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] == '-' || theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] == 'P'))
                                 {
                                     flag = false;  
@@ -712,6 +706,7 @@ namespace CountDown_Project2_
                                 {
                                     flag = false;
                                 }
+                                //If it's filled on all four direction zero shouldn't be able to move
                                 if (theMazeElem[zeroCoordinates[i, 1] + 1, zeroCoordinates[i, 0]] != '-' && theMazeElem[zeroCoordinates[i, 1] - 1, zeroCoordinates[i, 0]] != '-' && theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] + 1] != '-' && theMazeElem[zeroCoordinates[i, 1], zeroCoordinates[i, 0] - 1] != '-')
                                 {
                                     flag = false;
