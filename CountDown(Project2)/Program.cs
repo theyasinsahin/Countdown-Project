@@ -62,9 +62,7 @@ namespace CountDown_Project2_
                         flag = true;
                         row = random.Next(5, 25 - innerWallLenght);
                         column = random.Next(5, 54);
-                        for (int k = 0; k < theMazeElem.GetLength(0); k++)
-                            for (int l = 0; l < theMazeElem.GetLength(1); l++)
-                            {
+
                                 //Control The #'s up and down
                                 for (int y = -1; y < innerWallLenght + 1; y++)
                                 {
@@ -75,7 +73,7 @@ namespace CountDown_Project2_
                                     if (theMazeElem[row + y, column] == '#' || theMazeElem[row + y, column] == 'P')
                                         flag = false;
                                 }
-                            }
+                            
                     }
                     while (flag == false);
 
